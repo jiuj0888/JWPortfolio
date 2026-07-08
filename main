@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JJW Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 폰트 및 아이콘 -->
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body { 
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7; /* Apple's signature light background */
+            color: #1d1d1f; /* Apple's main dark text */
+            letter-spacing: -0.01em;
+        }
+        
+        /* 타이포그래피 애니메이션 */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeUpAnim 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        @keyframes fadeUpAnim {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Apple 스타일 라이트모드 글라스 (Vibrancy) */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
+            border-radius: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .glass-panel:hover {
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 배경 장식 애니메이션 (맑은 파스텔톤) */
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(20px, -30px) scale(1.05); }
+            66% { transform: translate(-10px, 15px) scale(0.95); }
+            100% { transform: translate(0, 0) scale(1); }
+        }
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        /* 비포/애프터 이미지 슬라이더 */
+        .comparison-slider {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            cursor: ew-resize;
+            border-radius: 1rem;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .comparison-img {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover; background-size: cover; background-position: center;
+            transition: background-image 0.3s ease-in-out;
+        }
+        .comparison-before {
+            width: 50%; z-index: 10;
+            border-right: 2px solid #ffffff;
+            box-shadow: 5px 0 15px rgba(0,0,0,0.1);
+        }
+        /* Apple 스타일 슬라이더 핸들 (라이트) */
+        .slider-handle {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 36px; height: 36px; background: #ffffff;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            color: #1d1d1f; z-index: 20; pointer-events: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+        }
+        
+        /* 커스텀 스크롤바 */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.4); }
+
+        /* macOS Window Traffic Lights (라이트 모드) */
+        .mac-controls {
+            display: flex; gap: 8px; padding: 16px;
+            position: absolute; top: 0; left: 0; z-index: 20;
+        }
+        .mac-dot { width: 12px; height: 12px; border-radius: 50%; }
+        .mac-close { background-color: #ff5f56; }
+        .mac-min { background-color: #ffbd2e; }
+        .mac-max { background-color: #27c93f; }
+    </style>
+</head>
+<body class="relative overflow-x-hidden min-h-screen">
+
+    <!-- 밝고 부드러운 오로라 배경 (파스텔 블루, 핑크, 화이트) -->
+    <div class="fixed inset-0 -z-10 bg-[#f5f5f7]">
+        <div class="bg-orb w-[60vw] h-[60vw] bg-blue-300 top-[-20%] left-[-10%]" style="animation-delay: 0s;"></div>
+        <div class="bg-orb w-[50vw] h-[50vw] bg-pink-200 bottom-[-10%] right-[-10%]" style="animation-delay: -5s;"></div>
+        <div class="bg-orb w-[40vw] h-[40vw] bg-cyan-200 top-[30%] left-[40%]" style="animation-delay: -10s;"></div>
+    </div>
+
+    <!-- 내비게이션 바 (Floating Dock 스타일 - Light) -->
+    <nav class="fixed w-full top-6 z-50 flex justify-center transition-all duration-300 px-6">
+        <div class="glass-panel px-8 py-3 flex justify-between items-center gap-12 !rounded-full shadow-md">
+            <a href="#hero" class="text-lg font-bold tracking-tight text-[#1d1d1f]">PORTFOLIO.</a>
+            <div class="space-x-8 text-sm font-semibold text-[#86868b] hidden md:flex">
+                <a href="#about" class="hover:text-[#1d1d1f] transition">About</a>
+                <a href="#web" class="hover:text-[#1d1d1f] transition">Web</a>
+                <a href="#video" class="hover:text-[#1d1d1f] transition">Video</a>
+                <a href="#graphics" class="hover:text-[#1d1d1f] transition">Graphics</a>
+                <a href="#photo" class="hover:text-[#1d1d1f] transition">Photo</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 화면 (Hero Section) -->
+    <section id="hero" class="min-h-screen flex items-center justify-center pt-32 pb-12">
+        <div class="max-w-6xl mx-auto px-6 w-full flex flex-col-reverse md:flex-row items-center gap-12">
+            
+            <!-- 왼쪽: 텍스트 및 소개글 -->
+            <div class="w-full md:w-1/2 space-y-6 z-10 text-center md:text-left">
+                <div class="glass-panel p-10 md:p-14 inline-block w-full">
+                    <span class="inline-block px-4 py-1.5 bg-[#0071e3]/10 text-[#0071e3] font-semibold text-xs rounded-full mb-6 border border-[#0071e3]/20">
+                       Web Publishing · Graphic Design · Video Editing
+                    </span>
+                    <h1 class="text-4xl md:text-6xl font-semibold leading-tight tracking-tight fade-up text-[#1d1d1f]">
+                        투명하게 빛나는<br>
+                        시각 경험을<br>설계합니다.
+                    </h1>
+                    <p class="text-lg text-[#86868b] mt-6 fade-up delay-1 font-medium leading-relaxed">
+                        디자인부터 웹 구현, 영상 제작까지.<br>
+                        다양한 디지털 콘텐츠를 제작하는<br>
+                        디지털 크리에이터 전지우입니다.
+                    </p>
+                    <div class="pt-10 fade-up delay-2">
+                        <a href="#portfolio" class="px-8 py-4 bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-full font-semibold transition inline-flex items-center shadow-lg shadow-blue-500/30">
+                            작업물 보기 <i class="fa-solid fa-arrow-down ml-2 text-sm"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 오른쪽: 프로필 사진 (macOS Window Light) -->
+            <div class="w-full md:w-1/2 fade-up delay-1 flex justify-center md:justify-end">
+                <div class="glass-panel w-72 h-[450px] md:w-80 md:h-[550px] flex flex-col relative group !p-0">
+                    <!-- macOS Window Controls -->
+                    <div class="mac-controls border-b border-black/5 w-full bg-white/50 backdrop-blur-md">
+                        <div class="mac-dot mac-close"></div>
+                        <div class="mac-dot mac-min"></div>
+                        <div class="mac-dot mac-max"></div>
+                    </div>
+                    
+                    <!-- 실제 이미지 영역 -->
+                    <div class="w-full h-full flex flex-col items-center justify-center text-[#86868b] text-center p-6 relative bg-white/40">
+                        <i class="fa-regular fa-user text-5xl mb-4"></i>
+                        <p class="font-medium text-sm">[Image of 감각적인 프로필 사진]</p>
+                    </div>
+                    
+                    <!-- 하단 플로팅 정보 -->
+                    <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 w-[85%] bg-white/80 backdrop-blur-xl border border-black/5 p-4 rounded-2xl flex justify-between items-center shadow-lg">
+                        <div>
+                            <p class="text-[10px] text-[#86868b] font-bold uppercase tracking-widest mb-1">Status</p>
+                            <p class="text-[#1d1d1f] font-semibold text-sm">Available for hire</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center border border-green-200">
+                            <div class="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_10px_rgba(39,201,63,0.5)]"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="portfolio" class="h-10"></div>
+
+    <!-- About & Skills (Apple 스타일 그리드) -->
+    <section id="about" class="py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="glass-panel p-10 md:p-14">
+                <h2 class="text-2xl font-semibold mb-10 text-[#1d1d1f] flex items-center gap-3 tracking-tight">
+                    <i class="fa-solid fa-wand-magic-sparkles text-[#0071e3]"></i> Toolkits & Skills
+                </h2>
+                
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                    <div class="bg-white/50 border border-black/5 p-6 rounded-2xl hover:bg-white/80 transition duration-300 group shadow-sm">
+                        <div class="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                            <i class="fa-brands fa-html5 text-2xl text-orange-500"></i>
+                        </div>
+                        <h3 class="font-semibold text-[#1d1d1f] mb-1">Web Publishing</h3>
+                        <p class="text-xs text-[#86868b]">HTML, CSS, JS</p>
+                    </div>
+
+                    <div class="bg-white/50 border border-black/5 p-6 rounded-2xl hover:bg-white/80 transition duration-300 group shadow-sm">
+                        <div class="w-12 h-12 rounded-xl bg-pink-100 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                            <i class="fa-brands fa-figma text-2xl text-pink-500"></i>
+                        </div>
+                        <h3 class="font-semibold text-[#1d1d1f] mb-1">UI/UX Design</h3>
+                        <p class="text-xs text-[#86868b]">Figma, Prototype</p>
+                    </div>
+
+                    <div class="bg-white/50 border border-black/5 p-6 rounded-2xl hover:bg-white/80 transition duration-300 group shadow-sm">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-image text-xl text-blue-500"></i>
+                        </div>
+                        <h3 class="font-semibold text-[#1d1d1f] mb-1">2D Graphics</h3>
+                        <p class="text-xs text-[#86868b]">Ps, Ai, Retouching</p>
+                    </div>
+
+                    <div class="bg-white/50 border border-black/5 p-6 rounded-2xl hover:bg-white/80 transition duration-300 group shadow-sm">
+                        <div class="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center mb-4 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-video text-xl text-purple-500"></i>
+                        </div>
+                        <h3 class="font-semibold text-[#1d1d1f] mb-1">Video Edit</h3>
+                        <p class="text-xs text-[#86868b]">Pr, Ae, Typography</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category 1: Web & UI -->
+    <section id="web" class="py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-3xl font-semibold mb-10 text-[#1d1d1f] ml-2 tracking-tight">Web & UI Design</h2>
+            
+            <div class="glass-panel flex flex-col md:flex-row !p-0 overflow-hidden mb-12 relative group shadow-sm">
+                <!-- 이미지 영역 (Safari 브라우저 창 라이트) -->
+                <div class="w-full md:w-3/5 h-[300px] md:h-[450px] bg-[#f5f5f7] flex flex-col relative border-r border-black/5">
+                    <div class="mac-controls border-b border-black/5 bg-[#e8e8ed] w-full relative h-10">
+                        <div class="mac-dot mac-close"></div>
+                        <div class="mac-dot mac-min"></div>
+                        <div class="mac-dot mac-max"></div>
+                        <!-- URL Bar -->
+                        <div class="absolute top-2 left-1/2 -translate-x-1/2 w-1/2 h-6 bg-white rounded-md flex items-center justify-center text-[10px] text-[#86868b] shadow-sm">
+                            <i class="fa-solid fa-lock text-[8px] mr-1"></i> portfolio.com
+                        </div>
+                    </div>
+                    <div class="flex-grow flex items-center justify-center bg-white/50">
+                        <span class="text-[#86868b] font-medium text-sm">[Image of 현재 웹사이트 캡처 화면]</span>
+                    </div>
+                </div>
+                <!-- 텍스트 영역 -->
+                <div class="w-full md:w-2/5 p-8 md:p-12 flex flex-col justify-center bg-white/40">
+                    <span class="inline-block px-3 py-1 bg-[#0071e3]/10 text-[#0071e3] border border-[#0071e3]/20 text-[11px] font-semibold rounded-md w-fit mb-4 uppercase tracking-wider">Development</span>
+                    <h3 class="text-2xl font-semibold mb-4 text-[#1d1d1f] leading-snug">Apple 감성의<br>포트폴리오 구현</h3>
+                    <p class="text-[#86868b] text-sm leading-relaxed mb-8 font-medium">
+                        세련된 톤과 Apple의 라이트모드 디자인 랭귀지를 하드코딩하여 구현한 원페이지 포트폴리오입니다. 섬세한 블러 처리와 미니멀한 요소를 통해 퍼블리싱 능력을 증명합니다.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-semibold text-[#1d1d1f]">
+                        <span class="bg-white border border-black/5 px-3 py-1.5 rounded-md shadow-sm">HTML5</span>
+                        <span class="bg-white border border-black/5 px-3 py-1.5 rounded-md shadow-sm">Tailwind</span>
+                        <span class="bg-white border border-black/5 px-3 py-1.5 rounded-md shadow-sm">JavaScript</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 새롭게 추가된: 내가 만든 홈페이지 링크 카드 -->
+            <div class="glass-panel flex flex-col md:flex-row-reverse !p-0 overflow-hidden relative group shadow-sm">
+                <!-- 클릭 시 홈페이지로 이동하는 이미지 영역 -->
+                <a href="https://your-website-url.com" target="_blank" class="w-full md:w-3/5 h-[300px] md:h-[450px] bg-[#f5f5f7] flex flex-col relative border-l border-black/5 cursor-pointer">
+                    <div class="mac-controls border-b border-black/5 bg-[#e8e8ed] w-full relative h-10">
+                        <div class="mac-dot mac-close"></div>
+                        <div class="mac-dot mac-min"></div>
+                        <div class="mac-dot mac-max"></div>
+                    </div>
+                    <div class="flex-grow flex items-center justify-center relative bg-white/50">
+                        <div class="absolute inset-0 bg-white/50 transition duration-300 z-20 flex items-center justify-center backdrop-blur-sm opacity-0 group-hover:opacity-100">
+                            <div class="bg-[#0071e3] px-5 py-2.5 rounded-full flex items-center gap-2 transform scale-95 group-hover:scale-100 transition duration-300 shadow-lg shadow-blue-500/20">
+                                <span class="font-semibold text-white text-sm">웹사이트 방문하기</span>
+                                <i class="fa-solid fa-arrow-up-right-from-square text-white text-xs"></i>
+                            </div>
+                        </div>
+                        <span class="text-[#86868b] font-medium text-sm">[Image of 제작한 홈페이지 캡처 화면]</span>
+                    </div>
+                </a>
+                
+                <div class="w-full md:w-2/5 p-8 md:p-12 flex flex-col justify-center text-right bg-white/40">
+                    <div class="w-full flex justify-end">
+                        <span class="inline-block px-3 py-1 bg-gray-100 text-gray-600 border border-gray-200 text-[11px] font-semibold rounded-md mb-4 uppercase tracking-wider">Client Project</span>
+                    </div>
+                    <h3 class="text-2xl font-semibold mb-4 text-[#1d1d1f] leading-snug">브랜드 공식<br>웹사이트 제작</h3>
+                    <p class="text-[#86868b] text-sm leading-relaxed mb-8 font-medium">
+                        직접 기획하고 디자인부터 퍼블리싱까지 완료한 웹사이트입니다. 우측 브라우저 창을 클릭하면 실제 라이브 중인 웹사이트로 바로 이동하여 동작을 확인할 수 있습니다.
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-semibold text-[#1d1d1f] justify-end">
+                        <span class="bg-white border border-black/5 px-3 py-1.5 rounded-md shadow-sm">React</span>
+                        <span class="bg-white border border-black/5 px-3 py-1.5 rounded-md shadow-sm">Tailwind</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Category 2: Video -->
+    <section id="video" class="py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-3xl font-semibold mb-10 text-[#1d1d1f] ml-2 tracking-tight">Motion & Video</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 미디어 플레이어 위젯 스타일 -->
+                <div class="glass-panel p-4 cursor-pointer group hover:bg-white/80 transition" onclick="openModal()">
+                    <div class="h-64 rounded-xl bg-gray-100 relative overflow-hidden flex items-center justify-center border border-black/5">
+                        <span class="text-[#86868b] font-medium text-sm group-hover:scale-105 transition duration-700">[Image of 타이포그래피 썸네일]</span>
+                        <!-- 플레이 버튼 (미니멀 라이트) -->
+                        <div class="absolute inset-0 bg-white/20 group-hover:bg-white/40 transition duration-300 flex items-center justify-center">
+                            <div class="w-14 h-14 rounded-full bg-white/80 backdrop-blur-md border border-white flex items-center justify-center transform scale-95 group-hover:scale-100 transition duration-300 shadow-md">
+                                <i class="fa-solid fa-play text-[#1d1d1f] text-lg ml-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 pb-2">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-semibold text-lg text-[#1d1d1f] mb-1">키네틱 타이포그래피</h3>
+                                <p class="text-xs text-[#86868b] font-medium">After Effects 애니메이션</p>
+                            </div>
+                            <div class="w-6 h-6 rounded-full bg-[#0071e3] flex items-center justify-center mt-1">
+                                <i class="fa-solid fa-play text-white text-[10px] ml-0.5"></i>
+                            </div>
+                        </div>
+                        <div class="w-full h-1 bg-gray-200 rounded-full mt-4 overflow-hidden">
+                            <div class="w-1/3 h-full bg-[#0071e3] rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-4 cursor-pointer group hover:bg-white/80 transition" onclick="openModal()">
+                    <div class="h-64 rounded-xl bg-gray-100 relative overflow-hidden flex items-center justify-center border border-black/5">
+                        <span class="text-[#86868b] font-medium text-sm group-hover:scale-105 transition duration-700">[Image of 뉴스 단신 썸네일]</span>
+                        <div class="absolute inset-0 bg-white/20 group-hover:bg-white/40 transition duration-300 flex items-center justify-center">
+                            <div class="w-14 h-14 rounded-full bg-white/80 backdrop-blur-md border border-white flex items-center justify-center transform scale-95 group-hover:scale-100 transition duration-300 shadow-md">
+                                <i class="fa-solid fa-play text-[#1d1d1f] text-lg ml-1"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 pb-2">
+                        <div class="flex justify-between items-start mb-2">
+                            <div>
+                                <h3 class="font-semibold text-lg text-[#1d1d1f] mb-1">뉴스 단신 제작</h3>
+                                <p class="text-xs text-[#86868b] font-medium">Premiere Pro 컷 편집 및 자막</p>
+                            </div>
+                            <div class="w-6 h-6 rounded-full bg-[#0071e3] flex items-center justify-center mt-1">
+                                <i class="fa-solid fa-play text-white text-[10px] ml-0.5"></i>
+                            </div>
+                        </div>
+                        <div class="w-full h-1 bg-gray-200 rounded-full mt-4 overflow-hidden">
+                            <div class="w-2/3 h-full bg-[#0071e3] rounded-full"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category 3: 2D Graphics & Retouching -->
+    <section id="graphics" class="py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <h2 class="text-3xl font-semibold mb-2 text-[#1d1d1f] ml-2 tracking-tight">2D Graphics & Retouching</h2>
+            <p class="text-[#86868b] mb-10 ml-2 font-medium text-sm">마우스로 슬라이더를 움직여 원본과 보정본을 비교해 보세요.</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                
+                <div class="glass-panel p-3">
+                    <div class="comparison-slider mb-3" id="imageSlider">
+                        <!-- 애프터 이미지 (원본 컬러) -->
+                        <div class="comparison-img bg-gray-200 flex items-center justify-center" id="afterBg" style="background-image: url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800&auto=format&fit=crop');">
+                            <span class="bg-white/80 text-[#1d1d1f] px-3 py-1.5 rounded-md backdrop-blur-md text-xs font-semibold shadow-sm">After</span>
+                        </div>
+                        
+                        <!-- 비포 이미지 (흑백 필터) -->
+                        <div class="comparison-img comparison-before bg-gray-300 flex items-center justify-center" id="beforeImageBg" style="background-image: url('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800&auto=format&fit=crop'); filter: grayscale(100%);">
+                            <div class="w-[800px] max-w-none h-full flex items-center justify-center">
+                                <span class="bg-white/80 text-[#86868b] px-3 py-1.5 rounded-md backdrop-blur-md text-xs font-semibold shadow-sm">Before</span>
+                            </div>
+                        </div>
+                        
+                        <div class="slider-handle" id="sliderHandle">
+                            <div class="w-0.5 h-4 bg-gray-400 mx-0.5 rounded-full"></div>
+                            <div class="w-0.5 h-4 bg-gray-400 mx-0.5 rounded-full"></div>
+                        </div>
+                    </div>
+
+                    <!-- 썸네일 갤러리 (라이트 모드 보더) -->
+                    <div class="flex gap-2 overflow-x-auto hide-scrollbar">
+                        <button onclick="changeRetouchImage('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=800&auto=format&fit=crop')" class="w-16 h-16 rounded-xl flex-shrink-0 border-2 border-[#0071e3] overflow-hidden focus:outline-none retouch-thumb opacity-100 transition shadow-sm">
+                            <img src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover">
+                        </button>
+                        <button onclick="changeRetouchImage('https://images.unsplash.com/photo-1600607688969-a5bfcd646154?q=80&w=800&auto=format&fit=crop')" class="w-16 h-16 rounded-xl flex-shrink-0 border-2 border-transparent overflow-hidden focus:outline-none retouch-thumb opacity-60 hover:opacity-100 transition shadow-sm">
+                            <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover">
+                        </button>
+                        <button onclick="changeRetouchImage('https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=800&auto=format&fit=crop')" class="w-16 h-16 rounded-xl flex-shrink-0 border-2 border-transparent overflow-hidden focus:outline-none retouch-thumb opacity-60 hover:opacity-100 transition shadow-sm">
+                            <img src="https://images.unsplash.com/photo-1517849845537-4d257902454a?q=80&w=200&auto=format&fit=crop" class="w-full h-full object-cover">
+                        </button>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="glass-panel p-8">
+                        <h3 class="text-xl font-semibold mb-3 text-[#1d1d1f]">고급 이미지 리터칭</h3>
+                        <p class="text-[#86868b] text-sm leading-relaxed font-medium">Photoshop을 활용한 색조 보정, 피부톤 정리, 불필요한 배경 요소 제거 등 목적에 맞는 최적의 톤 앤 매너를 기획하고 보정합니다.</p>
+                        
+                        <div class="mt-8 pt-6 border-t border-gray-200">
+                            <h4 class="font-semibold text-[#1d1d1f] mb-3 text-sm">Other Graphics</h4>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="bg-white/50 h-24 rounded-lg flex items-center justify-center border border-gray-200 text-xs font-medium text-[#86868b] hover:bg-white transition cursor-pointer shadow-sm">
+                                    [유튜브 썸네일]
+                                </div>
+                                <div class="bg-white/50 h-24 rounded-lg flex items-center justify-center border border-gray-200 text-xs font-medium text-[#86868b] hover:bg-white transition cursor-pointer shadow-sm">
+                                    [이벤트 팝업 배너]
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Category 4: Photography -->
+    <section id="photo" class="py-20 relative z-10">
+        <div class="max-w-6xl mx-auto px-6">
+            <div class="flex justify-between items-end mb-8 ml-2">
+                <div>
+                    <h2 class="text-3xl font-semibold text-[#1d1d1f] mb-1 tracking-tight">Photography</h2>
+                    <p class="text-[#86868b] font-medium text-sm">카메라 렌즈 너머로 포착한 순간들.</p>
+                </div>
+                <!-- PC 가로 스크롤 버튼 -->
+                <div class="hidden sm:flex gap-2">
+                    <button id="scrollLeft" class="w-8 h-8 rounded-full bg-white hover:bg-gray-50 border border-gray-200 shadow-sm flex items-center justify-center text-[#1d1d1f] transition"><i class="fa-solid fa-chevron-left text-xs"></i></button>
+                    <button id="scrollRight" class="w-8 h-8 rounded-full bg-white hover:bg-gray-50 border border-gray-200 shadow-sm flex items-center justify-center text-[#1d1d1f] transition"><i class="fa-solid fa-chevron-right text-xs"></i></button>
+                </div>
+            </div>
+
+            <!-- 스와이프 갤러리 (라이트 모드 캡션) -->
+            <div class="glass-panel p-4">
+                <div id="galleryContainer" class="flex gap-4 overflow-x-auto hide-scrollbar snap-x snap-mandatory scroll-smooth pb-2">
+                    <div class="min-w-[280px] md:min-w-[320px] aspect-[4/5] rounded-xl overflow-hidden snap-center relative group flex-shrink-0 border border-black/5 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                        <div class="absolute bottom-3 left-3 right-3 bg-white/80 backdrop-blur-md p-3 rounded-lg translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition duration-300 border border-white">
+                            <p class="font-semibold text-[#1d1d1f] text-sm">Cityscape</p>
+                            <p class="text-[10px] text-[#86868b] mt-0.5">Canon EOS M100</p>
+                        </div>
+                    </div>
+                    <div class="min-w-[280px] md:min-w-[320px] aspect-[4/5] rounded-xl overflow-hidden snap-center relative group flex-shrink-0 border border-black/5 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1469474968028-56623f02e42e?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                        <div class="absolute bottom-3 left-3 right-3 bg-white/80 backdrop-blur-md p-3 rounded-lg translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition duration-300 border border-white">
+                            <p class="font-semibold text-[#1d1d1f] text-sm">Nature</p>
+                            <p class="text-[10px] text-[#86868b] mt-0.5">f/2.8, 1/200s, ISO 100</p>
+                        </div>
+                    </div>
+                    <div class="min-w-[280px] md:min-w-[320px] aspect-[4/5] rounded-xl overflow-hidden snap-center relative group flex-shrink-0 border border-black/5 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                        <div class="absolute bottom-3 left-3 right-3 bg-white/80 backdrop-blur-md p-3 rounded-lg translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition duration-300 border border-white">
+                            <p class="font-semibold text-[#1d1d1f] text-sm">Workspace</p>
+                            <p class="text-[10px] text-[#86868b] mt-0.5">Color Graded</p>
+                        </div>
+                    </div>
+                    <div class="min-w-[280px] md:min-w-[320px] aspect-[4/5] rounded-xl overflow-hidden snap-center relative group flex-shrink-0 border border-black/5 bg-gray-100 flex items-center justify-center shadow-sm">
+                        <div class="text-[#86868b] font-medium text-sm text-center p-4">
+                            [Image of 본인 촬영 사진]
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer & Contact -->
+    <section id="contact" class="py-32 relative z-10 text-center">
+        <div class="max-w-2xl mx-auto px-6">
+            <h2 class="text-4xl font-semibold mb-4 text-[#1d1d1f] tracking-tight">함께 작업해 볼까요?</h2>
+            <p class="text-[#86868b] mb-10 font-medium">디자인, 퍼블리싱, 영상 편집 등 다양한 시각 매체 제작이 필요하시다면 언제든 편하게 연락해 주세요.</p>
+            
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="mailto:your.email@example.com" class="px-8 py-3.5 bg-[#1d1d1f] text-white font-semibold rounded-full hover:bg-black transition shadow-lg flex items-center justify-center">
+                    Contact Me
+                </a>
+                <a href="#" class="px-8 py-3.5 bg-white border border-gray-200 text-[#1d1d1f] font-semibold rounded-full hover:bg-gray-50 transition flex items-center justify-center shadow-sm">
+                    상세 이력서 보기
+                </a>
+            </div>
+            
+            <p class="mt-20 text-[#86868b] text-xs font-medium">© 2026 Creator Portfolio. Designed with macOS Light Aesthetic.</p>
+        </div>
+    </section>
+
+    <!-- Video Modal (어두운 배경 + 밝은 창) -->
+    <div id="videoModal" class="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div class="relative w-full max-w-4xl px-4">
+            <button onclick="closeModal()" class="absolute -top-12 right-4 w-10 h-10 rounded-full bg-white text-[#1d1d1f] hover:bg-gray-100 transition flex items-center justify-center text-2xl shadow-lg">&times;</button>
+            <div class="aspect-video glass-panel p-2 shadow-2xl">
+                <div class="w-full h-full bg-black rounded-xl flex items-center justify-center shadow-inner">
+                    <p class="text-white/60 font-medium text-sm"><i class="fa-solid fa-play mr-2"></i> 영상 플레이어가 들어갈 자리입니다</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 비포/애프터 이미지 슬라이더
+        const slider = document.getElementById('imageSlider');
+        const beforeImgWrapper = document.getElementById('beforeImageBg');
+        const sliderHandle = document.getElementById('sliderHandle');
+        let isSliding = false;
+
+        const slide = (x) => {
+            let rect = slider.getBoundingClientRect();
+            let position = ((x - rect.left) / rect.width) * 100;
+            if(position < 0) position = 0;
+            if(position > 100) position = 100;
+            beforeImgWrapper.style.width = position + '%';
+            sliderHandle.style.left = position + '%';
+        }
+
+        slider.addEventListener('mousedown', (e) => { isSliding = true; slide(e.clientX); });
+        window.addEventListener('mouseup', () => { isSliding = false; });
+        window.addEventListener('mousemove', (e) => { if (isSliding) slide(e.clientX); });
+        
+        slider.addEventListener('touchstart', (e) => { isSliding = true; slide(e.touches[0].clientX); });
+        window.addEventListener('touchend', () => { isSliding = false; });
+        window.addEventListener('touchmove', (e) => { if (isSliding) slide(e.touches[0].clientX); });
+
+        // 다중 이미지 리터칭 썸네일
+        const afterBg = document.getElementById('afterBg');
+        const thumbs = document.querySelectorAll('.retouch-thumb');
+
+        function changeRetouchImage(imgUrl) {
+            afterBg.style.backgroundImage = `url('${imgUrl}')`;
+            beforeImgWrapper.style.backgroundImage = `url('${imgUrl}')`;
+
+            thumbs.forEach(thumb => {
+                thumb.classList.remove('border-[#0071e3]', 'opacity-100');
+                thumb.classList.add('border-transparent', 'opacity-60');
+            });
+            event.currentTarget.classList.remove('border-transparent', 'opacity-60');
+            event.currentTarget.classList.add('border-[#0071e3]', 'opacity-100');
+        }
+
+        // 모달 제어
+        const modal = document.getElementById('videoModal');
+        function openModal() {
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+        function closeModal() {
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+        modal.addEventListener('click', (e) => {
+            if(e.target === modal) closeModal();
+        });
+
+        // 사진 갤러리 스크롤
+        const gallery = document.getElementById('galleryContainer');
+        const scrollLeftBtn = document.getElementById('scrollLeft');
+        const scrollRightBtn = document.getElementById('scrollRight');
+
+        if(scrollLeftBtn && scrollRightBtn) {
+            scrollLeftBtn.addEventListener('click', () => { gallery.scrollBy({ left: -340, behavior: 'smooth' }); });
+            scrollRightBtn.addEventListener('click', () => { gallery.scrollBy({ left: 340, behavior: 'smooth' }); });
+        }
+    </script>
+</body>
+</html>
