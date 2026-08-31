@@ -653,39 +653,39 @@
 
         <!-- 반복 -->
         <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm aspect-video">
-            <img src="b.jpg" onclick="imgModal(this.src)"
+            <img src="b.jpg" onclick="openProjectDetail('b')"
                  class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
         </div>
 
         <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm aspect-video">
-            <img src="c.jpg" onclick="imgModal(this.src)"
+            <img src="c.jpg" onclick="openProjectDetail('c')"
                  class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
         </div>
 
         <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm aspect-video">
-            <img src="d.jpg" onclick="imgModal(this.src)"
+            <img src="d.jpg" onclick="openProjectDetail('d')"
                  class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
         </div>
 
         <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm aspect-video">
-            <img src="e.png" onclick="imgModal(this.src)"
+            <img src="e.png" onclick="openProjectDetail('e')"
                  class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
         </div>
 
         <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm aspect-video">
-            <img src="f.png" onclick="imgModal(this.src)"
+            <img src="f.png" onclick="openProjectDetail('f')"
                  class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
         </div>
 		<div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm aspect-video">
-            <img src="g.png" onclick="imgModal(this.src)"
+            <img src="g.png" onclick="openProjectDetail('g')"
                  class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
         </div>
 		<div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm aspect-video">
-            <img src="h.png" onclick="imgModal(this.src)"
+            <img src="h.png" onclick="openProjectDetail('h')"
                  class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
         </div>
 <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm aspect-video">
-    <img src="i.jpg" onclick="openSclDetailModal()"
+    <img src="i.jpg" onclick="openProjectDetail('i')"
          class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
 </div>
     </div>
@@ -693,32 +693,26 @@
             </div>
         </div>
     </section>
-	<!-- SCL 뉴스레터 상세 모달 -->
-	<div id="sclDetailModal"
-     class="fixed inset-0 bg-black/70 hidden items-center justify-center z-[60] p-6"
-     role="dialog" aria-modal="true" aria-labelledby="sclDetailTitle">
-
-    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative p-8"
-         onclick="event.stopPropagation()">
-        <button type="button" onclick="closeSclDetailModal()"
-                class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-xl transition"
-                aria-label="닫기">×</button>
-
-        <h3 id="sclDetailTitle" class="text-2xl font-semibold text-[#1d1d1f] mb-6 pr-10">
-            SCL 뉴스레터 2025년 8월호
-        </h3>
-
-        <div class="space-y-3 text-sm text-[#555] leading-relaxed">
-            <p><span class="font-semibold text-[#1d1d1f]">담당:</span> 비주얼 콘셉트 및 편집디자인</p>
-            <p><span class="font-semibold text-[#1d1d1f]">실무 제작 기여도:</span> 100%</p>
-            <p>재직 중 제작된 공식 공개물이며 저작권과 상표권은 SCL에 있습니다.</p>
+	<!-- 그래픽 작품 공통 상세 모달 -->
+	<div id="projectDetailModal" class="fixed inset-0 bg-black/70 hidden items-center justify-center z-[60] p-4 md:p-6" role="dialog" aria-modal="true" aria-labelledby="projectDetailTitle" onclick="closeProjectDetail()">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[92vh] overflow-y-auto relative" onclick="event.stopPropagation()">
+        <button type="button" onclick="closeProjectDetail()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-gray-100 text-gray-700 text-xl shadow-md transition" aria-label="닫기">×</button>
+        <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)]">
+            <div class="bg-[#f5f5f7] min-h-[300px] md:min-h-[560px] flex items-center justify-center p-5 md:p-8">
+                <img id="projectDetailImage" src="" alt="" class="w-full h-full max-h-[72vh] object-contain rounded-xl">
+            </div>
+            <div class="p-7 md:p-10 flex flex-col justify-center">
+                <span id="projectDetailCategory" class="inline-block w-fit px-3 py-1 mb-5 rounded-full bg-[#0071e3]/10 text-[#0071e3] text-xs font-semibold"></span>
+                <h3 id="projectDetailTitle" class="text-2xl md:text-3xl font-semibold text-[#1d1d1f] mb-5 pr-8"></h3>
+                <p id="projectDetailDescription" class="text-sm text-[#666] leading-relaxed mb-8"></p>
+                <dl class="space-y-5 text-sm border-t border-gray-200 pt-6">
+                    <div><dt class="text-xs font-semibold text-[#86868b] mb-1">담당</dt><dd id="projectDetailRole" class="font-medium text-[#1d1d1f]"></dd></div>
+                    <div><dt class="text-xs font-semibold text-[#86868b] mb-1">제작 기여도</dt><dd id="projectDetailContribution" class="font-medium text-[#1d1d1f]"></dd></div>
+                    <div><dt class="text-xs font-semibold text-[#86868b] mb-1">구분</dt><dd id="projectDetailStatus" class="font-medium text-[#1d1d1f]"></dd></div>
+                </dl>
+                <a id="projectDetailLink" href="#" target="_blank" rel="noopener noreferrer" class="hidden mt-8 w-fit items-center px-5 py-2.5 bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-full font-semibold text-sm transition"><span id="projectDetailLinkLabel"></span><span class="ml-2">→</span></a>
+            </div>
         </div>
-
-        <a href="https://www.scllab.co.kr/front/bbsList.do?bbsId=BBS_0013&amp;nttId=0&amp;authFlag=&amp;pageIndex=2&amp;searchOp6=&amp;searchOp5=&amp;searchKeyword=&amp;searchWrd="
-           target="_blank" rel="noopener noreferrer"
-           class="mt-8 inline-flex items-center px-5 py-2.5 bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-full font-semibold text-sm transition">
-            공식 게시물 보기 <span class="ml-2">→</span>
-        </a>
     </div>
 </div>
 
@@ -933,26 +927,85 @@ function changeRetouchImage(before, after, el) {
 }
 
 
-	 // SCL 뉴스레터 상세 모달 제어
-	const sclDetailModalNode = document.getElementById('sclDetailModal');
+	 // 그래픽 작품 공통 상세 모달 제어
+	const projectDetails = {};
+	['b', 'c', 'd'].forEach((key, index) => {
+	    projectDetails[key] = {
+	        image: key + '.jpg', category: 'SwissFareCheck · Instagram Card News',
+	        title: 'SwissFareCheck 홍보 카드뉴스 0' + (index + 1),
+	        description: '직접 기획·개발한 SwissFareCheck 서비스를 인스타그램에서 소개하기 위해 제작한 홍보 카드뉴스입니다.',
+	        role: '콘텐츠 기획 · 카피 구성 · 카드뉴스 디자인', contribution: '100%',
+	        status: '개인 프로젝트 · 인스타그램 홍보 콘텐츠',
+	        link: 'https://swissfarecheck.com/', linkLabel: '웹사이트 보기'
+	    };
+	});
+	['e', 'f', 'g'].forEach((key, index) => {
+	    projectDetails[key] = {
+	        image: key + '.png', category: 'Recruitment Assignment · Card News',
+	        title: '실시간 통역 AI 홍보 카드뉴스 0' + (index + 1),
+	        description: '토스플레이스 채용 사전과제로 제시된 ‘실시간 통역 AI 서비스 홍보’ 주제를 카드뉴스 형식으로 기획·디자인했습니다.',
+	        role: '콘텐츠 기획 · 카피라이팅 · 카드뉴스 디자인', contribution: '100%',
+	        status: '토스플레이스 채용 사전과제',
+	        link: 'https://app.notion.com/p/AI-D-5-3c9e8750e3ac80888c47c2d8d6cd6758',
+	        linkLabel: '사전과제 상세 보기'
+	    };
+	});
+	projectDetails.h = {
+	    image: 'h.png', category: 'Naver Blog · Thumbnail Design', title: '맛집 협찬 콘텐츠 썸네일',
+	    description: '네이버 블로그의 맛집 협찬 콘텐츠에 사용하기 위해 직접 제작한 대표 썸네일입니다.',
+	    role: '썸네일 콘셉트 기획 · 편집디자인', contribution: '100%', status: '네이버 블로그 협찬 콘텐츠',
+	    link: 'https://blog.naver.com/alskm7633', linkLabel: '블로그 보기'
+	};
+	projectDetails.i = {
+	    image: 'i.jpg', category: 'SCL · Official Newsletter', title: 'SCL 뉴스레터 2025년 8월호',
+	    description: '재직 중 제작된 공식 공개물이며 저작권과 상표권은 SCL에 있습니다.',
+	    role: '비주얼 콘셉트 · 편집디자인', contribution: '100%', status: '공식 공개물',
+	    link: 'https://www.scllab.co.kr/front/bbsList.do?bbsId=BBS_0013&nttId=0&authFlag=&pageIndex=2&searchOp6=&searchOp5=&searchKeyword=&searchWrd=', linkLabel: '공식 게시물 보기'
+	};
 
-	function openSclDetailModal() {
-	    sclDetailModalNode.classList.remove('hidden');
-	    sclDetailModalNode.classList.add('flex');
+	const projectDetailModalNode = document.getElementById('projectDetailModal');
+	const projectDetailImage = document.getElementById('projectDetailImage');
+	const projectDetailCategory = document.getElementById('projectDetailCategory');
+	const projectDetailTitle = document.getElementById('projectDetailTitle');
+	const projectDetailDescription = document.getElementById('projectDetailDescription');
+	const projectDetailRole = document.getElementById('projectDetailRole');
+	const projectDetailContribution = document.getElementById('projectDetailContribution');
+	const projectDetailStatus = document.getElementById('projectDetailStatus');
+	const projectDetailLink = document.getElementById('projectDetailLink');
+	const projectDetailLinkLabel = document.getElementById('projectDetailLinkLabel');
+
+	function openProjectDetail(key) {
+	    const data = projectDetails[key];
+	    if (!data) return;
+	    projectDetailImage.src = data.image;
+	    projectDetailImage.alt = data.title;
+	    projectDetailCategory.textContent = data.category;
+	    projectDetailTitle.textContent = data.title;
+	    projectDetailDescription.textContent = data.description;
+	    projectDetailRole.textContent = data.role;
+	    projectDetailContribution.textContent = data.contribution;
+	    projectDetailStatus.textContent = data.status;
+	    if (data.link) {
+	        projectDetailLink.href = data.link;
+	        projectDetailLinkLabel.textContent = data.linkLabel;
+	        projectDetailLink.classList.remove('hidden');
+	        projectDetailLink.classList.add('inline-flex');
+	    } else {
+	        projectDetailLink.removeAttribute('href');
+	        projectDetailLink.classList.add('hidden');
+	        projectDetailLink.classList.remove('inline-flex');
+	    }
+	    projectDetailModalNode.classList.remove('hidden');
+	    projectDetailModalNode.classList.add('flex');
 	    document.body.style.overflow = 'hidden';
 	}
-
-	function closeSclDetailModal() {
-	    sclDetailModalNode.classList.add('hidden');
-	    sclDetailModalNode.classList.remove('flex');
+	function closeProjectDetail() {
+	    projectDetailModalNode.classList.add('hidden');
+	    projectDetailModalNode.classList.remove('flex');
 	    document.body.style.overflow = '';
 	}
-
-	sclDetailModalNode.addEventListener('click', closeSclDetailModal);
 	window.addEventListener('keydown', (e) => {
-	    if (e.key === 'Escape' && !sclDetailModalNode.classList.contains('hidden')) {
-	        closeSclDetailModal();
-	    }
+	    if (e.key === 'Escape' && !projectDetailModalNode.classList.contains('hidden')) closeProjectDetail();
 	});
 
 	 // 이미지 모달 제어
