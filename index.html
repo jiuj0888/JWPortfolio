@@ -698,8 +698,19 @@
     <div class="bg-white rounded-2xl shadow-2xl max-w-6xl w-full max-h-[92vh] overflow-y-auto relative" onclick="event.stopPropagation()">
         <button type="button" onclick="closeProjectDetail()" class="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-white/90 hover:bg-gray-100 text-gray-700 text-xl shadow-md transition" aria-label="닫기">×</button>
         <div class="grid grid-cols-1 md:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)]">
-            <div class="bg-[#f5f5f7] min-h-[300px] md:min-h-[560px] flex items-center justify-center p-5 md:p-8">
+            <div class="relative bg-[#f5f5f7] min-h-[300px] md:min-h-[560px] flex items-center justify-center p-5 md:p-8">
                 <img id="projectDetailImage" src="" alt="" class="w-full h-full max-h-[72vh] object-contain rounded-xl">
+                <button type="button" onclick="event.stopPropagation(); navigateProjectDetail(-1)"
+                        class="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 hover:bg-white text-[#1d1d1f] shadow-lg flex items-center justify-center transition hover:scale-105"
+                        aria-label="이전 작품">
+                    <i class="fa-solid fa-chevron-left text-sm"></i>
+                </button>
+                <button type="button" onclick="event.stopPropagation(); navigateProjectDetail(1)"
+                        class="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-white/90 hover:bg-white text-[#1d1d1f] shadow-lg flex items-center justify-center transition hover:scale-105"
+                        aria-label="다음 작품">
+                    <i class="fa-solid fa-chevron-right text-sm"></i>
+                </button>
+                <span id="projectDetailCounter" class="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black/60 text-white text-xs font-semibold backdrop-blur-md"></span>
             </div>
             <div class="p-7 md:p-10 flex flex-col justify-center">
                 <span id="projectDetailCategory" class="inline-block w-fit px-3 py-1 mb-5 rounded-full bg-[#0071e3]/10 text-[#0071e3] text-xs font-semibold"></span>
@@ -973,8 +984,11 @@ function changeRetouchImage(before, after, el) {
 	const projectDetailStatus = document.getElementById('projectDetailStatus');
 	const projectDetailLink = document.getElementById('projectDetailLink');
 	const projectDetailLinkLabel = document.getElementById('projectDetailLinkLabel');
+	const projectDetailCounter = document.getElementById('projectDetailCounter');
+	const projectKeys = ['b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'];
+	let currentProjectIndex = 0;
 
-	function openProjectDetail(key) {
+	function renderProjectDetail(key) {
 	    const data = projectDetails[key];
 	    if (!data) return;
 	    projectDetailImage.src = data.image;
@@ -985,6 +999,7 @@ function changeRetouchImage(before, after, el) {
 	    projectDetailRole.textContent = data.role;
 	    projectDetailContribution.textContent = data.contribution;
 	    projectDetailStatus.textContent = data.status;
+	    projectDetailCounter.textContent = (currentProjectIndex + 1) + ' / ' + projectKeys.length;
 	    if (data.link) {
 	        projectDetailLink.href = data.link;
 	        projectDetailLinkLabel.textContent = data.linkLabel;
@@ -995,17 +1010,33 @@ function changeRetouchImage(before, after, el) {
 	        projectDetailLink.classList.add('hidden');
 	        projectDetailLink.classList.remove('inline-flex');
 	    }
+	}
+
+	function openProjectDetail(key) {
+	    const index = projectKeys.indexOf(key);
+	    if (index === -1) return;
+	    currentProjectIndex = index;
+	    renderProjectDetail(key);
 	    projectDetailModalNode.classList.remove('hidden');
 	    projectDetailModalNode.classList.add('flex');
 	    document.body.style.overflow = 'hidden';
 	}
+
+	function navigateProjectDetail(direction) {
+	    currentProjectIndex = (currentProjectIndex + direction + projectKeys.length) % projectKeys.length;
+	    renderProjectDetail(projectKeys[currentProjectIndex]);
+	}
+
 	function closeProjectDetail() {
 	    projectDetailModalNode.classList.add('hidden');
 	    projectDetailModalNode.classList.remove('flex');
 	    document.body.style.overflow = '';
 	}
 	window.addEventListener('keydown', (e) => {
-	    if (e.key === 'Escape' && !projectDetailModalNode.classList.contains('hidden')) closeProjectDetail();
+	    if (projectDetailModalNode.classList.contains('hidden')) return;
+	    if (e.key === 'Escape') closeProjectDetail();
+	    if (e.key === 'ArrowLeft') navigateProjectDetail(-1);
+	    if (e.key === 'ArrowRight') navigateProjectDetail(1);
 	});
 
 	 // 이미지 모달 제어
