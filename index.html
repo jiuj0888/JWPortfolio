@@ -685,7 +685,7 @@
                  class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
         </div>
 <div class="overflow-hidden rounded-lg border border-gray-200 shadow-sm aspect-video">
-    <img src="i.jpg" onclick="sclDetailModal()"
+    <img src="i.jpg" onclick="openSclDetailModal()"
          class="w-full h-full object-cover hover:scale-105 transition duration-300 cursor-pointer">
 </div>
     </div>
@@ -693,6 +693,35 @@
             </div>
         </div>
     </section>
+	<!-- SCL 뉴스레터 상세 모달 -->
+	<div id="sclDetailModal"
+     class="fixed inset-0 bg-black/70 hidden items-center justify-center z-[60] p-6"
+     role="dialog" aria-modal="true" aria-labelledby="sclDetailTitle">
+
+    <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto relative p-8"
+         onclick="event.stopPropagation()">
+        <button type="button" onclick="closeSclDetailModal()"
+                class="absolute top-4 right-4 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-xl transition"
+                aria-label="닫기">×</button>
+
+        <h3 id="sclDetailTitle" class="text-2xl font-semibold text-[#1d1d1f] mb-6 pr-10">
+            SCL 뉴스레터 2025년 8월호
+        </h3>
+
+        <div class="space-y-3 text-sm text-[#555] leading-relaxed">
+            <p><span class="font-semibold text-[#1d1d1f]">담당:</span> 비주얼 콘셉트 및 편집디자인</p>
+            <p><span class="font-semibold text-[#1d1d1f]">실무 제작 기여도:</span> 100%</p>
+            <p>재직 중 제작된 공식 공개물이며 저작권과 상표권은 SCL에 있습니다.</p>
+        </div>
+
+        <a href="https://www.scllab.co.kr/front/bbsList.do?bbsId=BBS_0013&amp;nttId=0&amp;authFlag=&amp;pageIndex=2&amp;searchOp6=&amp;searchOp5=&amp;searchKeyword=&amp;searchWrd="
+           target="_blank" rel="noopener noreferrer"
+           class="mt-8 inline-flex items-center px-5 py-2.5 bg-[#0071e3] hover:bg-[#0077ed] text-white rounded-full font-semibold text-sm transition">
+            공식 게시물 보기 <span class="ml-2">→</span>
+        </a>
+    </div>
+</div>
+
 	<div id="imgModal"
      class="fixed inset-0 bg-black/80 flex items-center justify-center hidden opacity-0 transition duration-300 z-50">
 
@@ -903,6 +932,28 @@ function changeRetouchImage(before, after, el) {
     el.classList.add('border-[#0071e3]', 'opacity-100');
 }
 
+
+	 // SCL 뉴스레터 상세 모달 제어
+	const sclDetailModalNode = document.getElementById('sclDetailModal');
+
+	function openSclDetailModal() {
+	    sclDetailModalNode.classList.remove('hidden');
+	    sclDetailModalNode.classList.add('flex');
+	    document.body.style.overflow = 'hidden';
+	}
+
+	function closeSclDetailModal() {
+	    sclDetailModalNode.classList.add('hidden');
+	    sclDetailModalNode.classList.remove('flex');
+	    document.body.style.overflow = '';
+	}
+
+	sclDetailModalNode.addEventListener('click', closeSclDetailModal);
+	window.addEventListener('keydown', (e) => {
+	    if (e.key === 'Escape' && !sclDetailModalNode.classList.contains('hidden')) {
+	        closeSclDetailModal();
+	    }
+	});
 
 	 // 이미지 모달 제어
 	const imageModalNode = document.getElementById('imgModal');
